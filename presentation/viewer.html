@@ -319,6 +319,23 @@
     opacity: 0;
   }
   .active .titleslide .sub { animation: riseIn .6s ease both; animation-delay: .3s; }
+  .titleslide .byline {
+    margin-top: clamp(22px, 3vw, 32px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: clamp(12px, 1.3vw, 14px);
+    letter-spacing: 0.03em;
+    color: var(--accent-strong);
+    opacity: 0;
+  }
+  .titleslide .byline::before {
+    content: "";
+    width: 22px; height: 1px;
+    background: var(--accent);
+  }
+  .active .titleslide .byline { animation: riseIn .6s ease both; animation-delay: .42s; }
 
   /* ---------- chrome ---------- */
   .chrome {
@@ -417,7 +434,11 @@
     text-transform: uppercase;
     color: var(--ink-faint);
     pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
+  .brand .presenter { color: var(--accent-strong); }
 
   @media (max-width: 700px) {
     .grid2 { grid-template-columns: 1fr; }
@@ -437,7 +458,7 @@
   <div class="viewport" id="viewport"></div>
 
   <div class="chrome">
-    <span class="brand">Nigeria · Cybersecurity Outlook 2026</span>
+    <span class="brand"><span class="presenter">Kelechi Ahanonu</span><span>Nigeria · Cybersecurity Outlook 2026</span></span>
     <button class="fsbtn" id="fsBtn" title="Toggle fullscreen">⛶</button>
     <button class="clickzone left" id="zoneLeft" aria-label="Previous slide"></button>
     <button class="clickzone right" id="zoneRight" aria-label="Next slide"></button>
@@ -457,7 +478,8 @@
       type: "title",
       kicker: "Nigeria Cybersecurity Outlook · 2026",
       title: "Cybersecurity Trends in Nigeria",
-      sub: "What the 2026 outlook means for organisations operating here."
+      sub: "What the 2026 outlook means for organisations operating here.",
+      byline: "Kelechi Ahanonu"
     },
     {
       type: "bullets",
@@ -578,7 +600,7 @@
 
     if (s.type === "title") {
       el.classList.add("center", "titleslide");
-      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><p class="sub">' + s.sub + "</p>";
+      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><p class="sub">' + s.sub + '</p><div class="byline">' + s.byline + "</div>";
     } else if (s.type === "bullets") {
       html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><ul class="deck">' +
         s.items.map(function (i) { return "<li>" + i + "</li>"; }).join("") + "</ul>";
