@@ -1,0 +1,710 @@
+<title>Nigeria Cybersecurity Briefing — Presenter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F2F5F3;
+    --surface: #FFFFFF;
+    --surface-2: #E6ECE9;
+    --border: #D3DCD7;
+    --ink: #10201C;
+    --ink-muted: #4C5C56;
+    --ink-faint: #7C8B85;
+    --accent: #0F6B54;
+    --accent-strong: #0A4A3B;
+    --accent-tint: #E4F0EA;
+    --risk: #A85426;
+    --risk-tint: #F4E5DA;
+    --warn: #8A4B12;
+    --warn-tint: #F6E9D7;
+    --shadow: 0 1px 2px rgba(16,32,28,0.06), 0 12px 32px -16px rgba(16,32,28,0.18);
+    --radius: 14px;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1210;
+      --surface: #121B18;
+      --surface-2: #1A2521;
+      --border: #26332E;
+      --ink: #E9F1ED;
+      --ink-muted: #A3B6AE;
+      --ink-faint: #6E7F78;
+      --accent: #38CC9E;
+      --accent-strong: #7FE4C0;
+      --accent-tint: #142A22;
+      --risk: #E39461;
+      --risk-tint: #2B1E15;
+      --warn: #E8B368;
+      --warn-tint: #2B2213;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 16px 40px -18px rgba(0,0,0,0.6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1210;
+    --surface: #121B18;
+    --surface-2: #1A2521;
+    --border: #26332E;
+    --ink: #E9F1ED;
+    --ink-muted: #A3B6AE;
+    --ink-faint: #6E7F78;
+    --accent: #38CC9E;
+    --accent-strong: #7FE4C0;
+    --accent-tint: #142A22;
+    --risk: #E39461;
+    --risk-tint: #2B1E15;
+    --warn: #E8B368;
+    --warn-tint: #2B2213;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 16px 40px -18px rgba(0,0,0,0.6);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    padding: clamp(16px, 3vw, 40px);
+  }
+  h1, h2, h3 { font-family: "Newsreader", Georgia, serif; text-wrap: balance; margin: 0; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  a { color: inherit; }
+
+  .app { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+
+  .private {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--warn-tint);
+    border: 1px solid var(--warn);
+    color: var(--warn);
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 9px;
+    width: fit-content;
+  }
+  .private .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warn); flex: none; }
+
+  .masthead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 4px 2px; }
+  .masthead .id { display: flex; flex-direction: column; gap: 2px; }
+  .masthead .eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .masthead h1 { font-size: clamp(20px, 2.6vw, 26px); font-weight: 500; }
+  .masthead .meta { font-size: 12.5px; color: var(--ink-faint); }
+
+  .tabs { display: flex; gap: 4px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 4px; }
+  .tab { appearance: none; border: none; background: transparent; color: var(--ink-muted); font: inherit; font-size: 13.5px; font-weight: 600; padding: 8px 16px; border-radius: 999px; cursor: pointer; transition: background .15s ease, color .15s ease; }
+  .tab:hover { color: var(--ink); }
+  .tab[aria-selected="true"] { background: var(--accent); color: #fff; }
+  .tab:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .deck { display: grid; grid-template-columns: 56px 1fr; gap: 18px; }
+  .rail { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 6px; }
+  .rail-group { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .rail-group + .rail-group { margin-top: 10px; }
+  .rail-dot { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface); color: var(--ink-faint); font-family: "IBM Plex Mono", monospace; font-size: 10.5px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s ease; flex: none; }
+  .rail-dot:hover { border-color: var(--accent); color: var(--accent); }
+  .rail-dot.current { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .rail-dot.done { color: var(--accent); border-color: var(--accent); }
+
+  .slide-wrap { display: flex; flex-direction: column; gap: 12px; }
+  .slide { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(22px, 4vw, 46px); min-height: 400px; display: flex; flex-direction: column; gap: 22px; position: relative; overflow: hidden; }
+  .slide::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, var(--accent), transparent 70%); }
+  .slide-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .slide-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+  .slide-eyebrow .num { color: var(--accent); }
+  .badge-time { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--accent-strong); background: var(--accent-tint); border: 1px solid var(--border); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .slide h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 500; line-height: 1.12; max-width: 18ch; }
+
+  .bullets { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; max-width: 62ch; }
+  .bullets li { display: flex; gap: 12px; font-size: clamp(15px, 1.7vw, 18px); line-height: 1.5; color: var(--ink); }
+  .bullets li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-top: 9px; flex: none; }
+  .bullets li b { font-weight: 600; }
+
+  .radarlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; max-width: 68ch; }
+  .radarlist li { display: grid; grid-template-columns: 150px 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14.5px; }
+  .radarlist li:last-child { border-bottom: none; }
+  .radarlist b { color: var(--ink); }
+  .radarlist span.rtext { color: var(--ink-muted); line-height: 1.5; }
+
+  .columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .col { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+  .col .col-tag { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--accent-strong); font-weight: 600; }
+  .col h3 { font-size: 17px; font-weight: 500; color: var(--ink); }
+  .col ul { margin: 0; padding-left: 16px; font-size: 13.5px; color: var(--ink-muted); line-height: 1.55; }
+  .col ul li { margin-bottom: 4px; }
+
+  .takeaway { font-family: "Newsreader", serif; font-style: italic; font-size: clamp(19px, 2.6vw, 25px); line-height: 1.4; color: var(--ink); border-left: 3px solid var(--accent); padding-left: 18px; max-width: 56ch; }
+  .closing-line { font-size: 15.5px; color: var(--ink-muted); max-width: 58ch; }
+
+  .notes { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 0; overflow: hidden; }
+  .notes-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: transparent; border: none; color: var(--ink-muted); font: inherit; font-size: 12.5px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; padding: 12px 16px; cursor: pointer; }
+  .notes-toggle:hover { color: var(--ink); }
+  .notes-toggle .chev { transition: transform .15s ease; color: var(--ink-faint); }
+  .notes.open .notes-toggle .chev { transform: rotate(180deg); }
+  .notes-body { display: none; padding: 0 18px 18px; font-size: 14.5px; line-height: 1.6; color: var(--ink); max-width: 68ch; }
+  .notes.open .notes-body { display: block; }
+  .notes-body p { margin: 0 0 10px; }
+  .notes-body p:last-child { margin-bottom: 0; }
+  .notes-body .say { display: block; margin: 8px 0; padding: 8px 12px; background: var(--surface); border-left: 2px solid var(--accent); border-radius: 6px; font-style: italic; color: var(--ink-muted); }
+  .notes-body .subnote { margin: 6px 0 6px 2px; font-size: 13.5px; }
+  .notes-body .subnote b { color: var(--ink); }
+
+  .controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .controls .left, .controls .right { display: flex; align-items: center; gap: 8px; }
+  .navbtn { appearance: none; border: 1px solid var(--border); background: var(--surface); color: var(--ink); font: inherit; font-weight: 600; font-size: 13.5px; padding: 9px 16px; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: border-color .15s ease, color .15s ease; }
+  .navbtn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-strong); }
+  .navbtn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .navbtn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .navbtn.primary:hover { color: #fff; opacity: 0.92; }
+  .progress-readout { font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink-faint); }
+
+  .timer { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 6px 8px 6px 14px; }
+  .timer .clock { font-family: "IBM Plex Mono", monospace; font-size: 14px; min-width: 5ch; }
+  .timer .target { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-faint); }
+  .timer .delta { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; padding: 2px 7px; border-radius: 999px; }
+  .timer .delta.ahead { background: var(--accent-tint); color: var(--accent-strong); }
+  .timer .delta.behind { background: var(--risk-tint); color: var(--risk); }
+  .timer button.tbtn { appearance: none; border: none; background: var(--surface-2); color: var(--ink); width: 28px; height: 28px; border-radius: 7px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .timer button.tbtn:hover { background: var(--border); }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: clamp(20px, 3.5vw, 34px); }
+  .panel h2 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .panel .sub { color: var(--ink-muted); font-size: 14px; margin-bottom: 20px; }
+
+  table.pace { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  table.pace th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); font-weight: 600; padding: 0 10px 10px; border-bottom: 1px solid var(--border); }
+  table.pace td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--ink); }
+  table.pace tr:last-child td { border-bottom: none; font-weight: 600; }
+  table.pace td.num, table.pace th.num { font-family: "IBM Plex Mono", monospace; text-align: right; }
+  table.pace tr.group-first td { border-top: 2px solid var(--border); }
+  table.pace .grouptag { display: inline-block; font-size: 10.5px; letter-spacing: 0.04em; color: var(--accent-strong); background: var(--accent-tint); padding: 2px 8px; border-radius: 999px; margin-bottom: 3px; }
+  .tablewrap { overflow-x: auto; }
+  .tfoot-note { margin-top: 16px; font-size: 13px; color: var(--ink-faint); }
+
+  .qa-callouts { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; margin-bottom: 22px; }
+  .callout { border-radius: 12px; padding: 18px 20px; border: 1px solid var(--border); }
+  .callout.anchor { background: var(--accent-tint); border-color: var(--accent); }
+  .callout.avoid { background: var(--risk-tint); border-color: var(--risk); }
+  .callout .ctitle { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 8px; }
+  .callout.anchor .ctitle { color: var(--accent-strong); }
+  .callout.avoid .ctitle { color: var(--risk); }
+  .callout p { margin: 0 0 8px; font-size: 14px; line-height: 1.55; }
+  .callout p:last-child { margin: 0; }
+  .callout .say { font-style: italic; }
+  .callout ul { margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.7; color: var(--ink-muted); }
+  .callout .fallback { margin-top: 10px; font-size: 13px; font-style: italic; color: var(--ink-muted); }
+
+  .qa-cat-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700; color: var(--ink-faint); margin: 22px 0 10px; display: flex; align-items: center; gap: 10px; }
+  .qa-cat-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  .qa-item { border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: var(--surface); }
+  .qa-q { width: 100%; text-align: left; background: transparent; border: none; font: inherit; color: var(--ink); padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; font-size: 14.5px; font-weight: 500; }
+  .qa-q:hover { color: var(--accent-strong); }
+  .qa-q .chev { color: var(--ink-faint); transition: transform .15s ease; flex: none; }
+  .qa-item.open .qa-q .chev { transform: rotate(180deg); }
+  .qa-a { display: none; padding: 0 16px 16px; font-size: 14px; line-height: 1.6; color: var(--ink-muted); max-width: 66ch; }
+  .qa-item.open .qa-a { display: block; }
+  .qa-a .say { color: var(--ink); font-style: italic; display: block; margin: 6px 0; padding: 8px 12px; background: var(--surface-2); border-left: 2px solid var(--accent); border-radius: 6px; }
+  .qa-a .support { font-size: 12.5px; color: var(--ink-faint); margin-top: 8px; }
+
+  footer.hint { text-align: center; font-size: 12px; color: var(--ink-faint); padding: 8px 0 2px; }
+  footer.hint kbd { font-family: "IBM Plex Mono", monospace; background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 11px; }
+
+  @media (max-width: 760px) {
+    .deck { grid-template-columns: 1fr; }
+    .rail { flex-direction: row; flex-wrap: wrap; }
+    .rail-group { flex-direction: row; }
+    .columns { grid-template-columns: 1fr; }
+    .qa-callouts { grid-template-columns: 1fr; }
+    .radarlist li { grid-template-columns: 1fr; gap: 2px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="app">
+  <div class="private"><span class="dot"></span> Presenter view — keep this window off the shared screen</div>
+
+  <div class="masthead">
+    <div class="id">
+      <span class="eyebrow">Nigeria Cybersecurity Outlook · 2026</span>
+      <h1>Presenter Console</h1>
+      <span class="meta">9-slide companion to the viewer deck · notes · pacing · Q&amp;A rehearsal</span>
+    </div>
+    <div class="tabs" role="tablist" aria-label="View">
+      <button class="tab" role="tab" data-view="deck" aria-selected="true">Deck</button>
+      <button class="tab" role="tab" data-view="timing" aria-selected="false">Timing</button>
+      <button class="tab" role="tab" data-view="qa" aria-selected="false">Q&amp;A prep</button>
+    </div>
+  </div>
+
+  <section class="view active" id="view-deck">
+    <div class="deck">
+      <nav class="rail" id="rail" aria-label="Slides"></nav>
+      <div class="slide-wrap">
+        <div class="slide" id="slide"></div>
+        <div class="notes" id="notes">
+          <button class="notes-toggle" id="notesToggle"><span>Speaker notes</span><span class="chev">▾</span></button>
+          <div class="notes-body" id="notesBody"></div>
+        </div>
+        <div class="controls">
+          <div class="left">
+            <button class="navbtn" id="prevBtn">← Prev</button>
+            <button class="navbtn primary" id="nextBtn">Next →</button>
+            <span class="progress-readout" id="progressReadout"></span>
+          </div>
+          <div class="right">
+            <div class="timer">
+              <button class="tbtn" id="timerToggle" title="Start / pause timer">▶</button>
+              <button class="tbtn" id="timerReset" title="Reset timer">↺</button>
+              <span class="clock" id="clock">00:00</span>
+              <span class="target" id="target"></span>
+              <span class="delta" id="delta"></span>
+            </div>
+          </div>
+        </div>
+        <footer class="hint">Use <kbd>←</kbd> <kbd>→</kbd> to move between slides · <kbd>N</kbd> to toggle notes</footer>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-timing">
+    <div class="panel">
+      <h2>Pacing for a 15-minute slot</h2>
+      <p class="sub">Matches the viewer deck slide for slide — nine slides instead of thirteen, with room left for questions.</p>
+      <div class="tablewrap"><table class="pace" id="paceTable"></table></div>
+      <p class="tfoot-note" id="paceFootnote"></p>
+    </div>
+  </section>
+
+  <section class="view" id="view-qa">
+    <div class="panel">
+      <h2>Q&amp;A preparation</h2>
+      <p class="sub">Fifteen questions a CIO/CTO panel is likely to ask, grouped by what they're really testing. Tap a question to see the answer.</p>
+      <div class="qa-callouts">
+        <div class="callout anchor"><div class="ctitle">Your 30-second anchor answer</div><p class="say" id="anchorText"></p></div>
+        <div class="callout avoid"><div class="ctitle">Don't answer from memory</div><ul id="avoidList"></ul><p class="fallback" id="fallbackLine"></p></div>
+      </div>
+      <div id="qaContainer"></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SLIDES = [
+    {
+      group: "Why it matters", time: "0:45",
+      eyebrow: "Opening",
+      title: "Cybersecurity Trends in Nigeria",
+      bullets: [
+        "First time presenting this to this room — sharing what the Deloitte Nigeria Cybersecurity Outlook found, and what it means for organisations here.",
+        "<b>Thesis:</b> cybersecurity in Nigeria is moving from an IT concern to a business and organisational-resilience issue."
+      ],
+      notes: [
+        "Open by naming that this is new territory for you, deliberately — it's more credible than posturing as an expert:",
+        { say: "“Good morning, and thank you for the opportunity to speak with you. This is my first time presenting on this topic to this level of audience, so rather than trying to position myself as a cybersecurity expert, I'd like to share what I found in the latest Nigeria Cybersecurity Outlook and what I believe these trends could mean for organisations operating in Nigeria.”" },
+        "Then state the thesis directly:",
+        { say: "“The main message I took away is simple: cybersecurity in Nigeria is moving from being primarily an IT concern to becoming a business and organisational resilience issue.”" }
+      ]
+    },
+    {
+      group: "Why it matters", time: "1:10",
+      eyebrow: "Context",
+      title: "The Digital Surface Is Expanding",
+      bullets: [
+        "Payments, commerce, government services, cloud and APIs are all moving online.",
+        "More convenience means more entry points — a larger attack surface, not a different one.",
+        "Attackers now have access to the same technology stack organisations are adopting — especially AI."
+      ],
+      notes: [
+        { say: "“Nigeria itself is becoming more digital. More payments are digital, more services are online, more information is stored electronically, more organisations depend on cloud platforms and APIs. So we're creating a much larger digital environment — and naturally, that creates a larger attack surface.”" },
+        "Pause, then land the second half:",
+        { say: "“At the same time, attackers now have access to many of the same technologies organisations are adopting, particularly AI.”" }
+      ]
+    },
+    {
+      group: "Why it matters", time: "0:45",
+      eyebrow: "Framing",
+      title: "Four Questions for Leadership",
+      bullets: [
+        "<b>How are attacks changing?</b> — ransomware, phishing, identity attacks.",
+        "<b>How is technology changing defence?</b> — AI, agentic AI, Zero Trust.",
+        "<b>What external pressure is increasing?</b> — regulation, election-cycle risk.",
+        "<b>Do we have the people and process to respond?</b> — talent, secure software."
+      ],
+      notes: [
+        "Move quickly here — this slide is a map, not new content:",
+        { say: "“The report identifies eight major trends. I've grouped them into four leadership questions — those are what I'd like to explore.”" }
+      ]
+    },
+    {
+      group: "Three core trends", time: "1:30",
+      eyebrow: "Trend · Core",
+      title: "AI as Amplifier, Not Replacement",
+      bullets: [
+        "A SOC analyst can't watch every alert — AI monitors continuously and prioritises what actually matters.",
+        "Humans keep the judgement call: business context, severity, and what to do next.",
+        "<b>Leadership question:</b> where can AI cut the workload while humans stay accountable for the decision?"
+      ],
+      notes: [
+        { say: "“One of the things I found particularly interesting is that the report doesn't present AI as a replacement for cybersecurity professionals. It presents AI as an amplifier.”" },
+        { say: "“Imagine a SOC analyst receiving hundreds or thousands of alerts. The problem isn't necessarily that there isn't enough information — it's that there can be too much of it. AI can help monitor continuously, identify anomalies and prioritise alerts. But the human still needs to decide: is this actually a business threat, how serious is it, and what should we do?”" },
+        { say: "“So the question for leadership isn't simply, 'Should we buy AI?' The better question is, 'Where can AI reduce the workload of our security team while keeping humans in control of important decisions?'”" }
+      ]
+    },
+    {
+      group: "Three core trends", time: "1:20",
+      eyebrow: "Trend · Core",
+      title: "Identity Is the New Perimeter",
+      bullets: [
+        "“Inside the network” no longer means “safe” — attackers increasingly use stolen, legitimate credentials.",
+        "Zero Trust verifies identity, context and behaviour continuously, not once at login.",
+        "<b>Leadership question:</b> do we know who is accessing critical systems, and whether that behaviour is normal?"
+      ],
+      notes: [
+        { say: "“In the past, organisations often thought about security as protecting the network perimeter. But today, someone may not need to break through the perimeter at all — they could steal a legitimate employee's credentials and walk straight through the front door.”" },
+        { say: "“That's why we're seeing more emphasis on identity, strong authentication, behavioural monitoring and least privilege.”" },
+        "If challenged with 'so we shouldn't trust our staff?' — the Q&A tab (Q4) has the ready answer: it's not about distrusting people, it's about not auto-trusting a request.",
+        { say: "“The question becomes: do we know who is accessing our critical systems, why they're accessing them, and whether their behaviour is normal?”" }
+      ]
+    },
+    {
+      group: "Three core trends", time: "1:30",
+      eyebrow: "Trend · Core",
+      title: "Harder to Spot, Costlier to Ignore",
+      bullets: [
+        "AI-generated email, chat and even voice notes make impersonation far more convincing.",
+        "Once inside: data theft, disruption, then extortion for payment.",
+        "Awareness is no longer an HR checkbox — it's financial and operational risk management."
+      ],
+      notes: [
+        { say: "“Imagine an employee receives an email that appears to come from the CEO saying, 'Please urgently approve this payment.' It's perfectly written. Then a follow-up WhatsApp message. Then a voice note that sounds like the CEO. That's the direction we're moving in.”" },
+        { say: "“The problem is no longer simply identifying a badly written phishing email — AI makes impersonation much more convincing.”" },
+        "Define ransomware briefly: once attackers obtain legitimate access, they may steal information, disrupt operations and then demand payment.",
+        { say: "“So cybersecurity awareness is no longer just an HR training exercise. It is part of financial and operational risk management.”" }
+      ]
+    },
+    {
+      group: "Also on the radar", time: "2:30",
+      eyebrow: "Trend · Supporting (5, quick)",
+      title: "Five More Trends Worth Watching",
+      radar: [
+        ["Agentic AI", "Plans and executes multi-step actions with limited human input — useful for defence, but the same autonomy could be pointed the other way. We'll increasingly need to secure the agents themselves."],
+        ["Secure software", "Speed without security creates vulnerabilities. Security belongs in design and testing, not as a final gate — shared ownership across security, development and infrastructure."],
+        ["Data protection", "Regulators are moving from 'do you have a policy' to 'can you prove it.' Data governance is now part of business governance."],
+        ["2027 election cycle", "Government systems and public information face more pressure. Sometimes the goal is disruption or eroded trust, not a takedown — and it matters to business because we share the same digital ecosystem."],
+        ["Talent gap", "Roughly 4.8 million unfilled cybersecurity roles globally. The fix isn't just hiring seniors — it's partnerships, internships, mentoring and automation for lean teams."]
+      ],
+      notes: [
+        "This slide moves fast — five trends, one line of context each. Don't linger; the room already has the headline from your first six slides. Use the on-slide text as your script; each line below is close to verbatim if you want more color on one.",
+        { say: "Agentic AI: “Agentic AI goes beyond answering questions — it plans and executes steps with limited human input. Useful for defence, but the same autonomy could be pointed the other way.”" },
+        { say: "Secure software: “Speed without security creates vulnerabilities. Security needs to be part of the development lifecycle, not something checked at the end.”" },
+        { say: "Data protection: “The question isn't just 'do we have a policy' — it's 'can we prove we're protecting the data we're responsible for.'”" },
+        { say: "Election cycle: “As Nigeria approaches 2027, government systems and public information face more pressure — and businesses share that digital ecosystem.”" },
+        { say: "Talent gap: “Roughly 4.8 million unfilled cybersecurity roles globally — the best tooling still needs people who can run it.”" }
+      ]
+    },
+    {
+      group: "Action & close", time: "1:30",
+      eyebrow: "Recommendation",
+      title: "Now / Next / Build",
+      columns: [
+        { tag: "Now", heading: "Protect the basics", items: ["Strong authentication (MFA)", "Employee awareness", "Backups & tested recovery", "Monitoring & incident response"] },
+        { tag: "Next", heading: "Modernise the model", items: ["Zero Trust rollout", "SOC capability", "Secure software practice", "AI governance"] },
+        { tag: "Build", heading: "Build resilience", items: ["Talent pipeline", "Automate repetitive work", "Security × business collaboration"] }
+      ],
+      footnote: "Not about buying everything at once — prioritise by risk and impact.",
+      notes: [
+        { say: "“So, if I bring everything we've discussed together, I would suggest three levels of action.”" },
+        "Walk Now → Next → Build in order, then close with the caveat that keeps you from sounding like you're selling something:",
+        { say: "“The important point is that this doesn't necessarily mean buying everything at once. It's about understanding the organisation's risk and prioritising the highest-impact controls first.”" }
+      ]
+    },
+    {
+      group: "Action & close", time: "0:40",
+      eyebrow: "Closing",
+      title: "The Big Takeaway",
+      takeaway: "Cybersecurity in Nigeria is changing from a technical problem into an organisational resilience problem.",
+      bullets: [
+        "AI is changing the attacker.",
+        "Identity is changing the attack surface.",
+        "Regulation is changing accountability.",
+        "Talent shortages are changing how organisations operate."
+      ],
+      closing: "“The question is no longer whether cybersecurity matters — it's how quickly we make cybersecurity part of the way the organisation actually operates.”",
+      notes: [
+        "Deliver the takeaway line, pause, then the four one-liners, then the closing quote — don't rush this slide even though it's the shortest one:",
+        { say: "“My biggest takeaway from the research is that cybersecurity in Nigeria is changing from a technical problem into an organisational resilience problem.”" },
+        { say: "“AI is changing the attacker. Identity is changing the attack surface. Regulation is changing accountability. And talent shortages are changing how organisations need to operate.”" },
+        { say: "“For technology leaders, I believe the question is no longer whether cybersecurity matters. The question is how quickly we can make cybersecurity part of the way the organisation actually operates.”" },
+        { say: "“Thank you. I'd really welcome your perspective and questions.”" }
+      ]
+    }
+  ];
+
+  var QA_GROUPS = [
+    {
+      title: "“So what?” — why this matters to the business",
+      items: [
+        { q: "What is the single biggest cybersecurity trend you see?", a: "I would say the shift toward identity-centric security combined with AI. Attackers increasingly don't need to break through a network if they can obtain legitimate credentials. At the same time, AI is making attacks faster and more convincing. So organisations need to know not just what is connecting, but who is connecting, why, and whether that behaviour is normal.", support: "Supported by the report's discussion of identity attacks and Zero Trust." },
+        { q: "Is ransomware really a Nigerian problem, or just a global trend?", a: "It's both. The report specifically expects ransomware and targeted phishing to increase in Nigeria as more services, payments and records move online. It also highlights that the risk isn't limited to large enterprises — SMEs, schools, hospitals and government agencies can be targeted too." },
+        { q: "Why are you focusing so much on phishing? Surely technology can stop it.", a: "Technology can reduce the risk, but it can't remove the human element entirely. What's changing is that phishing itself is becoming more convincing because attackers can use AI to imitate trusted people and organisations. So organisations need a combination of technology, identity controls and employee awareness.", support: "The report specifically highlights AI-generated emails, messages and voice notes that resemble trusted communications." },
+        { q: "Why did you include the 2027 election in a corporate cybersecurity presentation?", a: "Because the report isn't treating election security as only an electoral issue. It highlights the broader risk to government systems, public services, identity databases and official information. For businesses, the lesson is that cybersecurity risk can extend beyond their own infrastructure into the wider digital ecosystem they depend on." }
+      ]
+    },
+    {
+      title: "“What should we actually do?”",
+      items: [
+        { q: "What is the most practical thing an organisation can do tomorrow?", a: "I would start with the basics before pursuing sophisticated technology: strong authentication, employee awareness, protection of privileged accounts, monitoring for unusual activity, reliable backups and a tested recovery plan. Once those foundations are strong, then move toward Zero Trust, SOC modernisation and AI-assisted security.", support: "The report notes resilience doesn't always require complex solutions — it highlights awareness, account protection, monitoring and recovery planning." },
+        { q: "If you were the CTO, what would your first three priorities be?", a: "First, identity — strong authentication, privileged-access controls and visibility into who is accessing critical systems. Second, resilience — reliable backups, monitoring and a tested incident-response and recovery process. Third, AI governance — understanding where the organisation is using AI, what data feeds those systems, and what level of autonomy we're allowing." },
+        { q: "What about the cybersecurity talent shortage?", a: "I don't think the answer is simply hiring more senior specialists — the market is already constrained. The report suggests a mix: partnerships with universities and tech hubs, internships, bootcamps, graduate programmes, mentorship, flexible hiring, and using automation and AI to support lean teams." }
+      ]
+    },
+    {
+      title: "“How does this affect cost?”",
+      items: [
+        { q: "How much should a company invest in cybersecurity?", a: "I wouldn't recommend a single percentage without understanding the organisation. Investment should be based on risk: the value of the assets we're protecting, the potential operational impact of an incident, regulatory exposure and the organisation's current maturity. The goal isn't to buy the most security technology — it's to reduce the highest-priority risks effectively." }
+      ]
+    },
+    {
+      title: "“How credible is this?” — do you actually understand your source",
+      items: [
+        { q: "If AI is being used by attackers, should organisations worry about using AI themselves?", a: "Yes, but I wouldn't argue organisations should avoid AI. The report points toward human-AI collaboration rather than replacement. AI can monitor continuously, identify anomalies and prioritise alerts, while humans retain judgement and control. The issue isn't AI versus cybersecurity — it's how AI is governed and where humans stay accountable.", support: "The report describes AI taking monitoring and prioritisation roles while humans provide judgement and business context." },
+        { q: "What is Agentic AI, and why should a CTO care?", a: "Traditional AI answers a question or performs a defined task. Agentic AI can operate more independently — breaking a goal into steps, making decisions and taking action with limited human input. That's powerful because it could automate parts of security operations, but it also creates a new risk because the same autonomy could be used offensively." },
+        { q: "Are you saying Zero Trust means we shouldn't trust our employees?", a: "No. Zero Trust isn't about distrusting people personally — it's about not automatically trusting an access request. Even a legitimate employee account could be compromised, so the system continuously evaluates identity, context, behaviour and risk rather than assuming that being inside the network means you're safe." },
+        { q: "What does the NDPA have to do with cybersecurity?", a: "They're different disciplines that are increasingly interconnected. Cybersecurity protects systems and information from threats; data protection deals with how personal data is collected, used, shared and governed. From a leadership perspective, a breach can become both a security problem and a data-protection problem.", support: "The report says organisations will need clearer understanding of how personal data is collected, used and shared, and that evidence of compliance will matter more." },
+        { q: "What do you think is Nigeria's biggest cybersecurity weakness?", a: "I wouldn't say the report identifies one single weakness. What I see as a recurring theme is the gap between having policies or technologies and having the people, processes and operational discipline to use them effectively — you see that in talent, data-protection implementation and security operations.", support: "Careful one — the report doesn't name a single weakness, so don't invent one." }
+      ]
+    },
+    {
+      title: "“What don't you know?”",
+      items: [
+        { q: "Are you a cybersecurity expert?", a: "No, I wouldn't position myself as a cybersecurity specialist. My focus in this presentation is understanding the technology and business implications of the trends, based primarily on the Deloitte Nigeria Cybersecurity Outlook 2026. I'm presenting what the research tells us and translating that into questions organisations should consider.", support: "Don't bluff this one — the honest answer is the credible answer." },
+        { q: "What would you challenge in the report?", a: "I wouldn't necessarily challenge the direction of the report, but predictions aren't guarantees. The actual impact will vary by sector, organisation size, maturity, threat exposure and investment. So I'd use the report as a strategic signal rather than treating every prediction as equally relevant to every organisation." }
+      ]
+    }
+  ];
+
+  var AVOID_LIST = [
+    "Exact number of Nigerian cyberattacks",
+    "Exact financial loss from cybercrime",
+    "Exact percentage increase in ransomware",
+    "Exact number of Nigerian cybersecurity professionals",
+    "Specific breaches not in your source",
+    "Exact NDPA fines unless independently verified",
+    "Technical architecture details outside your experience"
+  ];
+  var FALLBACK_LINE = "“That figure isn't in the source I'm using, so I don't want to give you an inaccurate number.”";
+  var ANCHOR = "“My key takeaway is that cybersecurity in Nigeria is moving from a technology problem to a resilience problem. Attackers are becoming more automated and identity-focused, AI is changing both offensive and defensive capabilities, regulation is increasing accountability, and the talent gap makes operational resilience harder. So for leadership, the question isn't simply what security technology to buy — it's how to build an organisation that can prevent, detect, respond to and recover from disruption.”";
+
+  var current = 0, notesOpen = false, timerSeconds = 0, timerRunning = false, timerHandle = null;
+
+  var railEl = document.getElementById("rail");
+  var slideEl = document.getElementById("slide");
+  var notesBodyEl = document.getElementById("notesBody");
+  var notesEl = document.getElementById("notes");
+  var notesToggle = document.getElementById("notesToggle");
+  var prevBtn = document.getElementById("prevBtn");
+  var nextBtn = document.getElementById("nextBtn");
+  var progressReadout = document.getElementById("progressReadout");
+
+  function secsToClock(s) { var m = Math.floor(s / 60), sec = s % 60; return (m < 10 ? "0" + m : m) + ":" + (sec < 10 ? "0" + sec : sec); }
+  function timeToSecs(t) { var p = t.split(":"); return parseInt(p[0], 10) * 60 + parseInt(p[1], 10); }
+
+  var cum = 0;
+  SLIDES.forEach(function (s) { cum += timeToSecs(s.time); s.cumSecs = cum; });
+
+  function renderRail() {
+    railEl.innerHTML = "";
+    var lastGroup = null, groupEl = null;
+    SLIDES.forEach(function (s, i) {
+      if (s.group !== lastGroup) {
+        groupEl = document.createElement("div");
+        groupEl.className = "rail-group";
+        railEl.appendChild(groupEl);
+        lastGroup = s.group;
+      }
+      var dot = document.createElement("button");
+      dot.className = "rail-dot" + (i === current ? " current" : i < current ? " done" : "");
+      dot.textContent = String(i + 1).padStart(2, "0");
+      dot.title = s.title;
+      dot.addEventListener("click", function () { goTo(i); });
+      groupEl.appendChild(dot);
+    });
+  }
+
+  function renderBullets(list) {
+    if (!list) return "";
+    return '<ul class="bullets">' + list.map(function (b) { return "<li>" + b + "</li>"; }).join("") + "</ul>";
+  }
+  function renderRadarList(list) {
+    return '<ul class="radarlist">' + list.map(function (it) {
+      return "<li><b>" + it[0] + '</b><span class="rtext">' + it[1] + "</span></li>";
+    }).join("") + "</ul>";
+  }
+  function renderColumns(cols) {
+    return '<div class="columns">' + cols.map(function (c) {
+      return '<div class="col"><span class="col-tag">' + c.tag + '</span><h3>' + c.heading + '</h3><ul>' +
+        c.items.map(function (i) { return "<li>" + i + "</li>"; }).join("") + '</ul></div>';
+    }).join("") + '</div>';
+  }
+  function renderNotes(notes) {
+    return notes.map(function (n) {
+      if (typeof n === "string") return "<p>" + n + "</p>";
+      return '<span class="say">' + n.say + "</span>";
+    }).join("");
+  }
+
+  function renderSlide() {
+    var s = SLIDES[current];
+    var html = '<div class="slide-head">' +
+      '<span class="slide-eyebrow"><span class="num">' + String(current + 1).padStart(2, "0") + " / " + SLIDES.length + "</span> · " + s.group + " · " + s.eyebrow + "</span>" +
+      '<span class="badge-time">' + s.time + " on the clock</span>" +
+      "</div>" +
+      "<h2>" + s.title + "</h2>";
+
+    if (s.takeaway) html += '<div class="takeaway">“' + s.takeaway + '”</div>';
+    if (s.bullets) html += renderBullets(s.bullets);
+    if (s.radar) html += renderRadarList(s.radar);
+    if (s.columns) html += renderColumns(s.columns);
+    if (s.footnote) html += '<div class="closing-line">' + s.footnote + "</div>";
+    if (s.closing) html += '<div class="closing-line">' + s.closing + "</div>";
+
+    slideEl.innerHTML = html;
+    notesBodyEl.innerHTML = renderNotes(s.notes);
+
+    prevBtn.disabled = current === 0;
+    nextBtn.textContent = current === SLIDES.length - 1 ? "Restart →" : "Next →";
+    progressReadout.textContent = "Slide " + (current + 1) + " of " + SLIDES.length + " · cumulative target " + secsToClock(s.cumSecs);
+
+    renderRail();
+    updateTimerReadout();
+    try { localStorage.setItem("ncb-slide-p", String(current)); } catch (e) {}
+  }
+
+  function goTo(i) { current = Math.max(0, Math.min(SLIDES.length - 1, i)); renderSlide(); }
+
+  prevBtn.addEventListener("click", function () { goTo(current - 1); });
+  nextBtn.addEventListener("click", function () { if (current === SLIDES.length - 1) { goTo(0); } else { goTo(current + 1); } });
+  notesToggle.addEventListener("click", function () { notesOpen = !notesOpen; notesEl.classList.toggle("open", notesOpen); });
+
+  document.addEventListener("keydown", function (e) {
+    var deckActive = document.getElementById("view-deck").classList.contains("active");
+    if (!deckActive) return;
+    if (e.key === "ArrowRight") { goTo(current + 1); }
+    else if (e.key === "ArrowLeft") { goTo(current - 1); }
+    else if (e.key === "n" || e.key === "N") { notesOpen = !notesOpen; notesEl.classList.toggle("open", notesOpen); }
+  });
+
+  var clockEl = document.getElementById("clock");
+  var targetEl = document.getElementById("target");
+  var deltaEl = document.getElementById("delta");
+  var timerToggle = document.getElementById("timerToggle");
+  var timerReset = document.getElementById("timerReset");
+
+  function updateTimerReadout() {
+    clockEl.textContent = secsToClock(timerSeconds);
+    var target = SLIDES[current].cumSecs;
+    targetEl.textContent = "target " + secsToClock(target);
+    var delta = timerSeconds - target;
+    if (Math.abs(delta) < 3) { deltaEl.textContent = "on pace"; deltaEl.className = "delta ahead"; }
+    else if (delta < 0) { deltaEl.textContent = secsToClock(-delta) + " ahead"; deltaEl.className = "delta ahead"; }
+    else { deltaEl.textContent = secsToClock(delta) + " behind"; deltaEl.className = "delta behind"; }
+  }
+
+  timerToggle.addEventListener("click", function () {
+    timerRunning = !timerRunning;
+    timerToggle.textContent = timerRunning ? "⏸" : "▶";
+    if (timerRunning) { timerHandle = setInterval(function () { timerSeconds += 1; updateTimerReadout(); }, 1000); }
+    else { clearInterval(timerHandle); }
+  });
+  timerReset.addEventListener("click", function () {
+    timerSeconds = 0; timerRunning = false; clearInterval(timerHandle); timerToggle.textContent = "▶"; updateTimerReadout();
+  });
+
+  function renderTiming() {
+    var table = document.getElementById("paceTable");
+    var rows = "<thead><tr><th>#</th><th>Topic</th><th class=\"num\">Time</th><th class=\"num\">Cumulative</th></tr></thead><tbody>";
+    var lastGroup = null;
+    SLIDES.forEach(function (s, i) {
+      var firstOfGroup = s.group !== lastGroup;
+      lastGroup = s.group;
+      rows += '<tr class="' + (firstOfGroup ? "group-first" : "") + '">' +
+        '<td class="mono">' + String(i + 1).padStart(2, "0") + '</td>' +
+        '<td>' + (firstOfGroup ? '<span class="grouptag">' + s.group + '</span><br>' : '') + s.title + '</td>' +
+        '<td class="num mono">' + s.time + '</td>' +
+        '<td class="num mono">' + secsToClock(s.cumSecs) + '</td>' +
+        '</tr>';
+    });
+    var total = SLIDES[SLIDES.length - 1].cumSecs;
+    rows += '<tr><td></td><td>Total</td><td class="num mono">' + secsToClock(total) + '</td><td class="num mono">' + secsToClock(total) + '</td></tr>';
+    rows += "</tbody>";
+    table.innerHTML = rows;
+    var bufferSecs = 15 * 60 - total;
+    document.getElementById("paceFootnote").textContent =
+      "Runs " + secsToClock(total) + " end to end, leaving about " + secsToClock(bufferSecs) + " of buffer inside a 15-minute slot for questions or a slower pace.";
+  }
+
+  function renderQA() {
+    document.getElementById("anchorText").textContent = ANCHOR;
+    document.getElementById("avoidList").innerHTML = AVOID_LIST.map(function (a) { return "<li>" + a + "</li>"; }).join("");
+    document.getElementById("fallbackLine").innerHTML = 'If pressed for a number you don’t have: <span class="say">' + FALLBACK_LINE + "</span>";
+
+    var container = document.getElementById("qaContainer");
+    container.innerHTML = "";
+    QA_GROUPS.forEach(function (group) {
+      var titleEl = document.createElement("div");
+      titleEl.className = "qa-cat-title";
+      titleEl.textContent = group.title;
+      container.appendChild(titleEl);
+      group.items.forEach(function (item) {
+        var itemEl = document.createElement("div");
+        itemEl.className = "qa-item";
+        var supportHtml = item.support ? '<div class="support">' + item.support + "</div>" : "";
+        itemEl.innerHTML = '<button class="qa-q"><span>' + item.q + '</span><span class="chev">▾</span></button>' +
+          '<div class="qa-a"><span class="say">' + item.a + "</span>" + supportHtml + "</div>";
+        itemEl.querySelector(".qa-q").addEventListener("click", function () { itemEl.classList.toggle("open"); });
+        container.appendChild(itemEl);
+      });
+    });
+  }
+
+  var tabs = document.querySelectorAll(".tab");
+  var views = { deck: document.getElementById("view-deck"), timing: document.getElementById("view-timing"), qa: document.getElementById("view-qa") };
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      tabs.forEach(function (t) { t.setAttribute("aria-selected", "false"); });
+      tab.setAttribute("aria-selected", "true");
+      Object.keys(views).forEach(function (k) { views[k].classList.remove("active"); });
+      views[tab.dataset.view].classList.add("active");
+      try { localStorage.setItem("ncb-tab-p", tab.dataset.view); } catch (e) {}
+    });
+  });
+
+  (function init() {
+    var savedSlide = 0, savedTab = "deck";
+    try {
+      savedSlide = parseInt(localStorage.getItem("ncb-slide-p"), 10) || 0;
+      savedTab = localStorage.getItem("ncb-tab-p") || "deck";
+    } catch (e) {}
+    current = Math.max(0, Math.min(SLIDES.length - 1, savedSlide));
+    renderSlide();
+    renderTiming();
+    renderQA();
+    var savedTabBtn = document.querySelector('.tab[data-view="' + savedTab + '"]');
+    if (savedTabBtn) savedTabBtn.click();
+  })();
+})();
+</script>

@@ -1,0 +1,654 @@
+<title>Cybersecurity Trends in Nigeria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F2F5F3;
+    --surface: #FFFFFF;
+    --ink: #10201C;
+    --ink-muted: #46564F;
+    --ink-faint: #85958E;
+    --accent: #0F6B54;
+    --accent-strong: #0A4A3B;
+    --accent-tint: #E4F0EA;
+    --border: #D3DCD7;
+    --blob-1: rgba(15,107,84,0.16);
+    --blob-2: rgba(15,107,84,0.10);
+    --grid-line: rgba(15,107,84,0.07);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0A100E;
+      --surface: #121B18;
+      --ink: #ECF4F0;
+      --ink-muted: #A9BCB4;
+      --ink-faint: #66766F;
+      --accent: #3ED2A2;
+      --accent-strong: #8FEBC9;
+      --accent-tint: #16302668;
+      --border: #26332E;
+      --blob-1: rgba(62,210,162,0.14);
+      --blob-2: rgba(62,210,162,0.08);
+      --grid-line: rgba(62,210,162,0.06);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0A100E;
+    --surface: #121B18;
+    --ink: #ECF4F0;
+    --ink-muted: #A9BCB4;
+    --ink-faint: #66766F;
+    --accent: #3ED2A2;
+    --accent-strong: #8FEBC9;
+    --accent-tint: #16302668;
+    --border: #26332E;
+    --blob-1: rgba(62,210,162,0.14);
+    --blob-2: rgba(62,210,162,0.08);
+    --grid-line: rgba(62,210,162,0.06);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    overflow: hidden;
+  }
+  h1, h2, h3 { font-family: "Newsreader", Georgia, serif; margin: 0; text-wrap: balance; }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  .stage {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* ---------- ambient backdrop ---------- */
+  .bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .bg .blob {
+    position: absolute;
+    width: 60vmax;
+    height: 60vmax;
+    border-radius: 50%;
+    filter: blur(60px);
+    will-change: transform;
+  }
+  .bg .blob.a { background: var(--blob-1); top: -20vmax; left: -15vmax; animation: driftA 46s ease-in-out infinite; }
+  .bg .blob.b { background: var(--blob-2); bottom: -25vmax; right: -18vmax; animation: driftB 54s ease-in-out infinite; }
+  .bg .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at center, black, transparent 75%);
+  }
+  @keyframes driftA {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(6vmax, 8vmax) scale(1.08); }
+  }
+  @keyframes driftB {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-7vmax, -6vmax) scale(1.05); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bg .blob { animation: none !important; }
+  }
+
+  /* ---------- slides ---------- */
+  .viewport {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: clamp(28px, 7vw, 110px) clamp(28px, 9vw, 140px);
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+    pointer-events: none;
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .slide.center { align-items: center; text-align: center; }
+
+  .kicker {
+    font-size: clamp(11px, 1.1vw, 13px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: clamp(14px, 2vw, 22px);
+    opacity: 0;
+  }
+  .active .kicker { animation: riseIn .6s ease both; animation-delay: .05s; }
+
+  .slide h2 {
+    font-size: clamp(32px, 6vw, 76px);
+    font-weight: 500;
+    line-height: 1.06;
+    max-width: 20ch;
+    opacity: 0;
+  }
+  .active h2 { animation: riseIn .7s ease both; animation-delay: .12s; }
+
+  .deck {
+    list-style: none;
+    margin: clamp(22px, 3.4vw, 40px) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(14px, 2vw, 20px);
+    max-width: 46ch;
+  }
+  .deck li {
+    display: flex;
+    gap: 14px;
+    font-size: clamp(16px, 2vw, 23px);
+    line-height: 1.45;
+    color: var(--ink-muted);
+    opacity: 0;
+  }
+  .deck li::before {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 10px;
+    flex: none;
+  }
+  .active .deck li { animation: riseIn .55s ease both; }
+  .active .deck li:nth-child(1) { animation-delay: .22s; }
+  .active .deck li:nth-child(2) { animation-delay: .34s; }
+  .active .deck li:nth-child(3) { animation-delay: .46s; }
+  .active .deck li:nth-child(4) { animation-delay: .58s; }
+  .active .deck li:nth-child(5) { animation-delay: .70s; }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kicker, .slide h2, .deck li, .card, .col2 { animation: none !important; opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ---------- 2x2 question grid ---------- */
+  .grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: clamp(14px, 2vw, 20px);
+    margin-top: clamp(24px, 3.6vw, 40px);
+    max-width: 62ch;
+    width: 100%;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(18px, 2.4vw, 26px);
+    box-shadow: 0 10px 30px -18px rgba(10,20,17,0.25);
+    opacity: 0;
+  }
+  .active .card { animation: riseIn .55s ease both; }
+  .active .card:nth-child(1) { animation-delay: .22s; }
+  .active .card:nth-child(2) { animation-delay: .32s; }
+  .active .card:nth-child(3) { animation-delay: .42s; }
+  .active .card:nth-child(4) { animation-delay: .52s; }
+  .card .cn { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--accent-strong); margin-bottom: 8px; }
+  .card p { margin: 0; font-size: clamp(15px, 1.7vw, 19px); color: var(--ink); line-height: 1.4; font-weight: 500; }
+
+  /* ---------- 5-up radar list ---------- */
+  .radar {
+    list-style: none;
+    margin: clamp(22px, 3.2vw, 36px) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.6vw, 16px);
+    max-width: 68ch;
+    width: 100%;
+  }
+  .radar li {
+    display: grid;
+    grid-template-columns: minmax(140px, 200px) 1fr;
+    gap: 18px;
+    align-items: baseline;
+    padding: clamp(10px, 1.4vw, 14px) 0;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+  }
+  .active .radar li { animation: riseIn .5s ease both; }
+  .active .radar li:nth-child(1) { animation-delay: .20s; }
+  .active .radar li:nth-child(2) { animation-delay: .30s; }
+  .active .radar li:nth-child(3) { animation-delay: .40s; }
+  .active .radar li:nth-child(4) { animation-delay: .50s; }
+  .active .radar li:nth-child(5) { animation-delay: .60s; }
+  .radar .rlabel { font-weight: 600; color: var(--ink); font-size: clamp(15px, 1.7vw, 19px); }
+  .radar .rtext { color: var(--ink-muted); font-size: clamp(14px, 1.5vw, 17px); line-height: 1.4; }
+
+  /* ---------- 3-column recs ---------- */
+  .cols3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(14px, 2vw, 20px);
+    margin-top: clamp(22px, 3.2vw, 36px);
+    max-width: 78ch;
+    width: 100%;
+  }
+  .col2 {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(16px, 2vw, 22px);
+    opacity: 0;
+    box-shadow: 0 10px 30px -18px rgba(10,20,17,0.25);
+  }
+  .active .col2 { animation: riseIn .55s ease both; }
+  .active .col2:nth-child(1) { animation-delay: .22s; }
+  .active .col2:nth-child(2) { animation-delay: .34s; }
+  .active .col2:nth-child(3) { animation-delay: .46s; }
+  .col2 .tag { font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--accent-strong); font-weight: 600; }
+  .col2 h3 { font-size: clamp(16px, 1.9vw, 19px); font-weight: 500; margin: 6px 0 10px; color: var(--ink); }
+  .col2 ul { margin: 0; padding-left: 16px; color: var(--ink-muted); font-size: clamp(12.5px, 1.4vw, 14.5px); line-height: 1.6; }
+  .col2 ul li { margin-bottom: 4px; }
+
+  /* ---------- closing ---------- */
+  .takeaway {
+    font-family: "Newsreader", serif;
+    font-style: italic;
+    font-size: clamp(24px, 4vw, 42px);
+    line-height: 1.35;
+    max-width: 22ch;
+    opacity: 0;
+  }
+  .active .takeaway { animation: riseIn .7s ease both; animation-delay: .18s; }
+  .close-lines {
+    margin-top: clamp(24px, 3.4vw, 38px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    justify-content: center;
+    max-width: 70ch;
+  }
+  .close-lines span {
+    font-size: clamp(13px, 1.5vw, 16px);
+    color: var(--ink-muted);
+    opacity: 0;
+  }
+  .active .close-lines span { animation: riseIn .5s ease both; }
+  .active .close-lines span:nth-child(1) { animation-delay: .34s; }
+  .active .close-lines span:nth-child(2) { animation-delay: .42s; }
+  .active .close-lines span:nth-child(3) { animation-delay: .50s; }
+  .active .close-lines span:nth-child(4) { animation-delay: .58s; }
+  .thanks {
+    margin-top: clamp(30px, 4vw, 46px);
+    font-size: clamp(14px, 1.6vw, 17px);
+    color: var(--accent-strong);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    opacity: 0;
+  }
+  .active .thanks { animation: riseIn .5s ease both; animation-delay: .7s; }
+
+  /* ---------- title slide ---------- */
+  .titleslide .sub {
+    margin-top: clamp(14px, 2vw, 20px);
+    font-size: clamp(15px, 1.8vw, 20px);
+    color: var(--ink-muted);
+    max-width: 52ch;
+    opacity: 0;
+  }
+  .active .titleslide .sub { animation: riseIn .6s ease both; animation-delay: .3s; }
+
+  /* ---------- chrome ---------- */
+  .chrome {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+  }
+  .clickzone {
+    position: absolute; top: 0; bottom: 0; width: 18%;
+    pointer-events: auto;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+  }
+  .clickzone.left { left: 0; }
+  .clickzone.right { right: 0; }
+
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 85%, transparent);
+    color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 0;
+    transition: opacity .2s ease, background .2s ease;
+  }
+  .stage:hover .arrow { opacity: 0.7; }
+  .arrow:hover { opacity: 1 !important; background: var(--accent-tint); }
+  .arrow.prev { left: clamp(10px, 2vw, 28px); }
+  .arrow.next { right: clamp(10px, 2vw, 28px); }
+  .arrow:disabled { display: none; }
+
+  .dots {
+    position: absolute;
+    bottom: clamp(14px, 2.4vw, 26px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    pointer-events: auto;
+  }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background .2s ease, width .2s ease;
+  }
+  .dot.on { background: var(--accent); width: 20px; border-radius: 4px; }
+
+  .counter {
+    position: absolute;
+    bottom: clamp(14px, 2.4vw, 26px);
+    right: clamp(16px, 3vw, 32px);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    pointer-events: none;
+  }
+
+  .fsbtn {
+    position: absolute;
+    top: clamp(14px, 2.4vw, 26px);
+    right: clamp(16px, 3vw, 32px);
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 85%, transparent);
+    color: var(--ink-muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    font-size: 14px;
+    opacity: 0.55;
+    transition: opacity .2s ease;
+  }
+  .fsbtn:hover { opacity: 1; color: var(--ink); }
+
+  .brand {
+    position: absolute;
+    top: clamp(14px, 2.4vw, 26px);
+    left: clamp(16px, 3vw, 32px);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    pointer-events: none;
+  }
+
+  @media (max-width: 700px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .cols3 { grid-template-columns: 1fr; }
+    .radar li { grid-template-columns: 1fr; gap: 4px; }
+    .arrow { display: none; }
+  }
+</style>
+
+<div class="stage" id="stage">
+  <div class="bg" aria-hidden="true">
+    <div class="grid"></div>
+    <div class="blob a"></div>
+    <div class="blob b"></div>
+  </div>
+
+  <div class="viewport" id="viewport"></div>
+
+  <div class="chrome">
+    <span class="brand">Nigeria · Cybersecurity Outlook 2026</span>
+    <button class="fsbtn" id="fsBtn" title="Toggle fullscreen">⛶</button>
+    <button class="clickzone left" id="zoneLeft" aria-label="Previous slide"></button>
+    <button class="clickzone right" id="zoneRight" aria-label="Next slide"></button>
+    <button class="arrow prev" id="prevArrow" aria-label="Previous slide">‹</button>
+    <button class="arrow next" id="nextArrow" aria-label="Next slide">›</button>
+    <div class="dots" id="dots"></div>
+    <span class="counter" id="counter"></span>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SLIDES = [
+    {
+      type: "title",
+      kicker: "Nigeria Cybersecurity Outlook · 2026",
+      title: "Cybersecurity Trends in Nigeria",
+      sub: "What the 2026 outlook means for organisations operating here."
+    },
+    {
+      type: "bullets",
+      kicker: "Context",
+      title: "The Digital Surface Is Expanding",
+      items: [
+        "Payments, commerce, government services, cloud and APIs — all moving online.",
+        "More convenience means more entry points, not a different kind of risk.",
+        "Attackers now have access to the same technology stack we do — especially AI."
+      ]
+    },
+    {
+      type: "grid2",
+      kicker: "Framing",
+      title: "Four Questions for Leadership",
+      cards: [
+        "How are attacks changing?",
+        "How is technology changing defence?",
+        "What external pressure is increasing?",
+        "Do we have the people and process to respond?"
+      ]
+    },
+    {
+      type: "bullets",
+      kicker: "Trend — Core",
+      title: "AI as Amplifier, Not Replacement",
+      items: [
+        "Continuous monitoring, anomaly detection, alert triage — at machine speed.",
+        "Humans keep the judgement call: context, severity, response.",
+        "The question: where can AI cut the workload while humans stay accountable?"
+      ]
+    },
+    {
+      type: "bullets",
+      kicker: "Trend — Core",
+      title: "Identity Is the New Perimeter",
+      items: [
+        "“Inside the network” no longer means “safe.”",
+        "Stolen, legitimate credentials are now a common way in.",
+        "Zero Trust verifies identity, context and behaviour — continuously."
+      ]
+    },
+    {
+      type: "bullets",
+      kicker: "Trend — Core",
+      title: "Harder to Spot, Costlier to Ignore",
+      items: [
+        "AI-generated email, chat and voice make impersonation far more convincing.",
+        "Access → data theft → disruption → extortion.",
+        "Awareness is now financial and operational risk management."
+      ]
+    },
+    {
+      type: "radar",
+      kicker: "Also on the radar",
+      title: "Five More Trends Worth Watching",
+      items: [
+        ["Agentic AI", "Powerful automation for defence — the same autonomy can cut both ways."],
+        ["Secure software", "Build the locks in during development, not after."],
+        ["Data protection", "Regulators shifting from policy to proof."],
+        ["2027 election cycle", "Government systems and public trust under more pressure."],
+        ["Talent gap", "Roughly 4.8M unfilled cybersecurity roles, globally."]
+      ]
+    },
+    {
+      type: "cols3",
+      kicker: "Recommendation",
+      title: "Now / Next / Build",
+      cols: [
+        { tag: "Now", h: "Protect the basics", items: ["Strong authentication (MFA)", "Employee awareness", "Backups & tested recovery", "Monitoring & incident response"] },
+        { tag: "Next", h: "Modernise the model", items: ["Zero Trust rollout", "SOC capability", "Secure software practice", "AI governance"] },
+        { tag: "Build", h: "Build resilience", items: ["Talent pipeline", "Automate repetitive work", "Security × business collaboration"] }
+      ]
+    },
+    {
+      type: "closing",
+      kicker: "Closing",
+      takeaway: "Cybersecurity in Nigeria is changing from a technical problem into an organisational resilience problem.",
+      lines: [
+        "AI is changing the attacker",
+        "Identity is changing the attack surface",
+        "Regulation is changing accountability",
+        "Talent shortages are changing operations"
+      ],
+      thanks: "Thank you — questions welcome."
+    }
+  ];
+
+  var current = 0;
+  var viewport = document.getElementById("viewport");
+  var dotsEl = document.getElementById("dots");
+  var counterEl = document.getElementById("counter");
+  var prevArrow = document.getElementById("prevArrow");
+  var nextArrow = document.getElementById("nextArrow");
+
+  function cardsHtml(cards) {
+    return '<div class="grid2">' + cards.map(function (c, i) {
+      return '<div class="card"><div class="cn">' + String(i + 1).padStart(2, "0") + '</div><p>' + c + "</p></div>";
+    }).join("") + "</div>";
+  }
+  function radarHtml(items) {
+    return '<ul class="radar">' + items.map(function (it) {
+      return '<li><span class="rlabel">' + it[0] + '</span><span class="rtext">' + it[1] + "</span></li>";
+    }).join("") + "</ul>";
+  }
+  function cols3Html(cols) {
+    return '<div class="cols3">' + cols.map(function (c) {
+      return '<div class="col2"><span class="tag">' + c.tag + '</span><h3>' + c.h + '</h3><ul>' +
+        c.items.map(function (i) { return "<li>" + i + "</li>"; }).join("") + "</ul></div>";
+    }).join("") + "</div>";
+  }
+
+  function buildSlide(s, idx) {
+    var el = document.createElement("section");
+    el.className = "slide";
+    el.dataset.index = idx;
+    var html = "";
+
+    if (s.type === "title") {
+      el.classList.add("center", "titleslide");
+      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><p class="sub">' + s.sub + "</p>";
+    } else if (s.type === "bullets") {
+      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><ul class="deck">' +
+        s.items.map(function (i) { return "<li>" + i + "</li>"; }).join("") + "</ul>";
+    } else if (s.type === "grid2") {
+      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + "</h2>" + cardsHtml(s.cards);
+    } else if (s.type === "radar") {
+      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + "</h2>" + radarHtml(s.items);
+    } else if (s.type === "cols3") {
+      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + "</h2>" + cols3Html(s.cols);
+    } else if (s.type === "closing") {
+      el.classList.add("center");
+      html = '<div class="kicker">' + s.kicker + '</div><div class="takeaway">“' + s.takeaway + '”</div>' +
+        '<div class="close-lines">' + s.lines.map(function (l) { return "<span>" + l + "</span>"; }).join("") + "</div>" +
+        '<div class="thanks">' + s.thanks + "</div>";
+    }
+    el.innerHTML = html;
+    return el;
+  }
+
+  SLIDES.forEach(function (s, i) { viewport.appendChild(buildSlide(s, i)); });
+  var slideEls = viewport.querySelectorAll(".slide");
+
+  SLIDES.forEach(function (s, i) {
+    var dot = document.createElement("button");
+    dot.className = "dot";
+    dot.setAttribute("aria-label", "Go to slide " + (i + 1));
+    dot.addEventListener("click", function () { goTo(i); });
+    dotsEl.appendChild(dot);
+  });
+  var dotEls = dotsEl.querySelectorAll(".dot");
+
+  function render() {
+    slideEls.forEach(function (el, i) { el.classList.toggle("active", i === current); });
+    dotEls.forEach(function (d, i) { d.classList.toggle("on", i === current); });
+    counterEl.textContent = String(current + 1).padStart(2, "0") + " / " + String(SLIDES.length).padStart(2, "0");
+    prevArrow.disabled = current === 0;
+    nextArrow.disabled = current === SLIDES.length - 1;
+    try { localStorage.setItem("ncb-viewer-slide", String(current)); } catch (e) {}
+  }
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(SLIDES.length - 1, i));
+    render();
+  }
+
+  document.getElementById("zoneLeft").addEventListener("click", function () { goTo(current - 1); });
+  document.getElementById("zoneRight").addEventListener("click", function () { goTo(current + 1); });
+  prevArrow.addEventListener("click", function (e) { e.stopPropagation(); goTo(current - 1); });
+  nextArrow.addEventListener("click", function (e) { e.stopPropagation(); goTo(current + 1); });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); goTo(current + 1); }
+    else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); goTo(current - 1); }
+    else if (e.key === "Home") { goTo(0); }
+    else if (e.key === "End") { goTo(SLIDES.length - 1); }
+    else if (e.key === "f" || e.key === "F") { toggleFullscreen(); }
+  });
+
+  var stage = document.getElementById("stage");
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      stage.requestFullscreen && stage.requestFullscreen();
+    } else {
+      document.exitFullscreen && document.exitFullscreen();
+    }
+  }
+  document.getElementById("fsBtn").addEventListener("click", toggleFullscreen);
+
+  var saved = 0;
+  try { saved = parseInt(localStorage.getItem("ncb-viewer-slide"), 10) || 0; } catch (e) {}
+  goTo(saved);
+})();
+</script>
