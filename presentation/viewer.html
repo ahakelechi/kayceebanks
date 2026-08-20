@@ -310,6 +310,36 @@
   }
   .active .thanks { animation: riseIn .5s ease both; animation-delay: .7s; }
 
+  /* ---------- references ---------- */
+  .refs {
+    list-style: none;
+    margin: clamp(24px, 3.4vw, 40px) 0 0;
+    padding: 0;
+    max-width: 62ch;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .refs li {
+    font-size: clamp(15px, 1.7vw, 19px);
+    line-height: 1.6;
+    color: var(--ink);
+    padding-left: 2em;
+    text-indent: -2em;
+    opacity: 0;
+  }
+  .active .refs li { animation: riseIn .55s ease both; animation-delay: .22s; }
+  .refs a { color: var(--accent-strong); text-decoration-color: var(--border); word-break: break-word; }
+  .refs em { font-style: italic; }
+  .refs-note {
+    margin-top: clamp(18px, 2.6vw, 26px);
+    font-size: clamp(12.5px, 1.4vw, 14.5px);
+    color: var(--ink-faint);
+    max-width: 56ch;
+    opacity: 0;
+  }
+  .active .refs-note { animation: riseIn .5s ease both; animation-delay: .38s; }
+
   /* ---------- title slide ---------- */
   .titleslide .sub {
     margin-top: clamp(14px, 2vw, 20px);
@@ -353,6 +383,7 @@
   }
   .clickzone.left { left: 0; }
   .clickzone.right { right: 0; }
+  .clickzone.suspended { pointer-events: none; }
 
   .arrow {
     position: absolute;
@@ -565,6 +596,15 @@
         "Talent shortages are changing operations"
       ],
       thanks: "Thank you — questions welcome."
+    },
+    {
+      type: "references",
+      kicker: "Source",
+      title: "References",
+      refs: [
+        'Deloitte. (2026). <em>Nigeria cybersecurity outlook 2026</em>. <a href="https://www.deloitte.com/ng/en/services/consulting/perspectives/nigeria-cybersecurity-outlook-2026.html">https://www.deloitte.com/ng/en/services/consulting/perspectives/nigeria-cybersecurity-outlook-2026.html</a>'
+      ],
+      note: "APA 7th edition. All trends, figures and quotes in this briefing are drawn from this report."
     }
   ];
 
@@ -615,6 +655,9 @@
       html = '<div class="kicker">' + s.kicker + '</div><div class="takeaway">“' + s.takeaway + '”</div>' +
         '<div class="close-lines">' + s.lines.map(function (l) { return "<span>" + l + "</span>"; }).join("") + "</div>" +
         '<div class="thanks">' + s.thanks + "</div>";
+    } else if (s.type === "references") {
+      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><ul class="refs">' +
+        s.refs.map(function (r) { return "<li>" + r + "</li>"; }).join("") + '</ul><p class="refs-note">' + s.note + "</p>";
     }
     el.innerHTML = html;
     return el;
@@ -632,12 +675,20 @@
   });
   var dotEls = dotsEl.querySelectorAll(".dot");
 
+  var zoneLeft = document.getElementById("zoneLeft");
+  var zoneRight = document.getElementById("zoneRight");
+
   function render() {
     slideEls.forEach(function (el, i) { el.classList.toggle("active", i === current); });
     dotEls.forEach(function (d, i) { d.classList.toggle("on", i === current); });
     counterEl.textContent = String(current + 1).padStart(2, "0") + " / " + String(SLIDES.length).padStart(2, "0");
     prevArrow.disabled = current === 0;
     nextArrow.disabled = current === SLIDES.length - 1;
+    // Slides with a real link (e.g. References) need clicks to reach the
+    // link rather than be swallowed by the edge click-to-navigate zones.
+    var hasLink = SLIDES[current].type === "references";
+    zoneLeft.classList.toggle("suspended", hasLink);
+    zoneRight.classList.toggle("suspended", hasLink);
     try { localStorage.setItem("ncb-viewer-slide", String(current)); } catch (e) {}
   }
 
