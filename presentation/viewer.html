@@ -13,6 +13,8 @@
     --accent: #0F6B54;
     --accent-strong: #0A4A3B;
     --accent-tint: #E4F0EA;
+    --risk: #A85426;
+    --risk-tint: #F4E5DA;
     --border: #D3DCD7;
     --blob-1: rgba(15,107,84,0.16);
     --blob-2: rgba(15,107,84,0.10);
@@ -30,6 +32,8 @@
       --accent: #3ED2A2;
       --accent-strong: #8FEBC9;
       --accent-tint: #16302668;
+      --risk: #E39461;
+      --risk-tint: #2B1E15;
       --border: #26332E;
       --blob-1: rgba(62,210,162,0.14);
       --blob-2: rgba(62,210,162,0.08);
@@ -46,6 +50,8 @@
     --accent: #3ED2A2;
     --accent-strong: #8FEBC9;
     --accent-tint: #16302668;
+    --risk: #E39461;
+    --risk-tint: #2B1E15;
     --border: #26332E;
     --blob-1: rgba(62,210,162,0.14);
     --blob-2: rgba(62,210,162,0.08);
@@ -189,7 +195,53 @@
     to { opacity: 1; transform: translateY(0); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .kicker, .slide h2, .deck li, .card, .col2 { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .kicker, .slide h2, .deck li, .card, .col2, .vpart, .refs li, .refs-note, .close-lines span, .thanks, .takeaway, .titleslide .sub, .titleslide .byline {
+      animation: none !important; opacity: 1 !important; transform: none !important;
+    }
+  }
+
+  /* ---------- split layout (text + supporting figure) ---------- */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) minmax(260px, 1.1fr);
+    gap: clamp(28px, 4vw, 64px);
+    align-items: center;
+    width: 100%;
+    max-width: 1080px;
+  }
+  .split-text h2 { font-size: clamp(24px, 3.3vw, 42px); max-width: none; }
+  .split-text .deck { max-width: none; }
+  .split-viz {
+    max-width: 480px;
+    width: 100%;
+    justify-self: center;
+  }
+  .split-viz figure { margin: 0; }
+  .split-viz svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .split-viz figcaption {
+    margin-top: clamp(10px, 1.4vw, 14px);
+    font-size: clamp(12px, 1.3vw, 13.5px);
+    line-height: 1.55;
+    color: var(--ink-faint);
+    max-width: 46ch;
+  }
+  .split-viz figcaption b { color: var(--ink-muted); font-weight: 600; }
+
+  .vpart { opacity: 0; }
+  .active .vpart { animation: vIn .55s ease both; }
+  @keyframes vIn {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .vline {
+    stroke-dasharray: var(--len, 300);
+    stroke-dashoffset: var(--len, 300);
+  }
+  .active .vline { animation: vDraw .7s ease-out both; }
+  @keyframes vDraw { to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .vpart { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .vline { animation: none !important; stroke-dashoffset: 0 !important; }
   }
 
   /* ---------- 2x2 question grid ---------- */
@@ -476,6 +528,8 @@
     .cols3 { grid-template-columns: 1fr; }
     .radar li { grid-template-columns: 1fr; gap: 4px; }
     .arrow { display: none; }
+    .split { grid-template-columns: 1fr; }
+    .split-viz { max-width: 340px; }
   }
 </style>
 
@@ -516,6 +570,7 @@
       type: "bullets",
       kicker: "Context",
       title: "The Digital Surface Is Expanding",
+      viz: "digitalSurface",
       items: [
         "Payments, commerce, government services, cloud and APIs — all moving online.",
         "More convenience means more entry points, not a different kind of risk.",
@@ -537,6 +592,7 @@
       type: "bullets",
       kicker: "Trend — Core",
       title: "AI as Amplifier, Not Replacement",
+      viz: "aiHuman",
       items: [
         "Continuous monitoring, anomaly detection, alert triage — at machine speed.",
         "Humans keep the judgement call: context, severity, response.",
@@ -547,6 +603,7 @@
       type: "bullets",
       kicker: "Trend — Core",
       title: "Identity Is the New Perimeter",
+      viz: "zeroTrust",
       items: [
         "“Inside the network” no longer means “safe.”",
         "Stolen, legitimate credentials are now a common way in.",
@@ -557,6 +614,7 @@
       type: "bullets",
       kicker: "Trend — Core",
       title: "Harder to Spot, Costlier to Ignore",
+      viz: "attackChain",
       items: [
         "AI-generated email, chat and voice make impersonation far more convincing.",
         "Access → data theft → disruption → extortion.",
@@ -602,9 +660,11 @@
       kicker: "Source",
       title: "References",
       refs: [
-        'Deloitte. (2026). <em>Nigeria cybersecurity outlook 2026</em>. <a href="https://www.deloitte.com/ng/en/services/consulting/perspectives/nigeria-cybersecurity-outlook-2026.html">https://www.deloitte.com/ng/en/services/consulting/perspectives/nigeria-cybersecurity-outlook-2026.html</a>'
+        'Deloitte. (2026). <em>Nigeria cybersecurity outlook 2026</em>. <a href="https://www.deloitte.com/ng/en/services/consulting/perspectives/nigeria-cybersecurity-outlook-2026.html">https://www.deloitte.com/ng/en/services/consulting/perspectives/nigeria-cybersecurity-outlook-2026.html</a>',
+        'Ecofin Agency. (2026). <em>Deloitte warns of rising ransomware and phishing attacks in Nigeria in 2026</em>. <a href="https://www.ecofinagency.com/news-digital/2301-52222-deloitte-warns-of-rising-ransomware-and-phishing-attacks-in-nigeria-in-2026">https://www.ecofinagency.com/news-digital/2301-52222-deloitte-warns-of-rising-ransomware-and-phishing-attacks-in-nigeria-in-2026</a>',
+        'TechAfrica News. (2026, January 26). <em>Deloitte warns of rising ransomware and phishing threats in Nigeria for 2026</em>. <a href="https://techafricanews.com/2026/01/26/deloitte-warns-of-rising-ransomware-and-phishing-threats-in-nigeria-for-2026/">https://techafricanews.com/2026/01/26/deloitte-warns-of-rising-ransomware-and-phishing-threats-in-nigeria-for-2026/</a>'
       ],
-      note: "APA 7th edition. All trends, figures and quotes in this briefing are drawn from this report."
+      note: "APA 7th edition. The Deloitte report is the primary source for every trend in this briefing; the two press pieces are cited only for the loss-estimate figure on the ransomware slide."
     }
   ];
 
@@ -632,6 +692,152 @@
     }).join("") + "</div>";
   }
 
+  function rectNode(x, y, w, h, label) {
+    var cx = x + w / 2, cy = y + h / 2 + 4;
+    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1.3"/>' +
+      '<text x="' + cx + '" y="' + cy + '" text-anchor="middle" font-size="12.5" fill="var(--ink)">' + label + "</text>";
+  }
+
+  var VIZ = {
+    digitalSurface: function () {
+      return '<figure><svg viewBox="0 0 440 380" role="img" aria-label="Diagram: four digital channels — payments, commerce, government services, and cloud and APIs — connect to the organisation; each channel that extends outward is also a path a risk can travel back in on.">' +
+        '<defs><marker id="arrowOut" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>' +
+        '<g class="vpart" style="animation-delay:.18s">' +
+          '<line class="vline" style="--len:200" x1="220" y1="170" x2="82" y2="39" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrowOut)"/>' +
+          '<line class="vline" style="--len:200" x1="220" y1="170" x2="358" y2="39" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrowOut)"/>' +
+          '<line class="vline" style="--len:200" x1="220" y1="170" x2="82" y2="301" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrowOut)"/>' +
+          '<line class="vline" style="--len:200" x1="220" y1="170" x2="358" y2="301" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrowOut)"/>' +
+          '<circle cx="137" cy="91" r="5" fill="var(--risk)"/><circle cx="303" cy="91" r="5" fill="var(--risk)"/>' +
+          '<circle cx="137" cy="249" r="5" fill="var(--risk)"/><circle cx="303" cy="249" r="5" fill="var(--risk)"/>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.32s">' +
+          '<rect x="160" y="143" width="120" height="54" rx="10" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.5"/>' +
+          '<text x="220" y="165" text-anchor="middle" font-size="12" font-weight="600" fill="var(--accent-strong)">Your</text>' +
+          '<text x="220" y="181" text-anchor="middle" font-size="12" font-weight="600" fill="var(--accent-strong)">organisation</text>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.42s">' +
+          rectNode(16, 16, 132, 46, "Payments") + rectNode(292, 16, 132, 46, "Cloud &amp; APIs") +
+          rectNode(16, 278, 132, 46, "Commerce") + rectNode(292, 278, 132, 46, "Gov. services") +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.58s">' +
+          '<line x1="30" y1="341" x2="60" y2="341" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrowOut)"/>' +
+          '<text x="68" y="345" font-size="11" fill="var(--ink-faint)">New digital channel</text>' +
+          '<circle cx="252" cy="341" r="5" fill="var(--risk)"/>' +
+          '<text x="264" y="345" font-size="11" fill="var(--ink-faint)">Same path, new entry point</text>' +
+        "</g>" +
+        "</svg><figcaption><b>Every channel runs both ways.</b> Payments, commerce, government services, cloud and APIs each extend the organisation outward — and each is a path risk can travel back in on (Deloitte, 2026).</figcaption></figure>";
+    },
+    aiHuman: function () {
+      var dots = [[28,26],[48,54],[26,84],[50,112],[28,142],[48,172],[26,202],[50,228]].map(function (p) {
+        return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="4" fill="var(--ink-faint)"/>';
+      }).join("");
+      return '<figure><svg viewBox="0 0 480 260" role="img" aria-label="Diagram: a stream of alerts flows through an AI triage stage that narrows it to a small set for a human to decide on.">' +
+        '<defs><marker id="arrowD2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>' +
+        '<g class="vpart" style="animation-delay:.16s">' + dots + "</g>" +
+        '<g class="vpart" style="animation-delay:.30s">' +
+          '<line class="vline" style="--len:70" x1="64" y1="125" x2="130" y2="125" stroke="currentColor" stroke-width="1.6" marker-end="url(#arrowD2)"/>' +
+          '<text x="97" y="113" text-anchor="middle" font-size="11" fill="var(--ink-faint)">watches everything</text>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.42s">' +
+          '<rect x="136" y="85" width="120" height="80" rx="10" fill="var(--accent-tint)" stroke="var(--accent)" stroke-width="1.5"/>' +
+          '<text x="196" y="120" text-anchor="middle" font-size="14" font-weight="700" fill="var(--accent-strong)">AI</text>' +
+          '<text x="196" y="140" text-anchor="middle" font-size="11" fill="var(--ink-muted)">detect · prioritise</text>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.54s">' +
+          '<line class="vline" style="--len:55" x1="260" y1="125" x2="310" y2="125" stroke="currentColor" stroke-width="1.6" marker-end="url(#arrowD2)"/>' +
+          '<text x="285" y="113" text-anchor="middle" font-size="11" fill="var(--ink-faint)">flags what matters</text>' +
+          '<circle cx="318" cy="105" r="4.5" fill="var(--accent)"/><circle cx="318" cy="125" r="4.5" fill="var(--accent)"/><circle cx="318" cy="145" r="4.5" fill="var(--accent)"/>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.66s">' +
+          '<rect x="344" y="85" width="112" height="80" rx="10" fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>' +
+          '<text x="400" y="120" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">You decide</text>' +
+          '<text x="400" y="140" text-anchor="middle" font-size="11" fill="var(--ink-muted)">context · action</text>' +
+        "</g>" +
+        "</svg><figcaption><b>Volume becomes signal.</b> AI keeps watch over the full alert stream and narrows it to what needs a person; the decision itself stays with a human (Deloitte, 2026).</figcaption></figure>";
+    },
+    zeroTrust: function () {
+      return '<figure><svg viewBox="0 0 480 270" role="img" aria-label="Diagram comparing a perimeter security model, where one login lets a compromised account move freely inside, against Zero Trust, where every request is verified and the same account is blocked at the next hop.">' +
+        '<defs><marker id="arrowD3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--risk)"/></marker></defs>' +
+        '<g class="vpart" style="animation-delay:.10s">' +
+          '<line x1="240" y1="8" x2="240" y2="228" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 4"/>' +
+          '<text x="120" y="254" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink-faint)">TRUST ONCE</text>' +
+          '<text x="360" y="254" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink-faint)">VERIFY EVERY TIME</text>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.20s">' +
+          '<circle cx="120" cy="30" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>' +
+          '<text x="120" y="16" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Login</text>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.30s">' +
+          '<line class="vline" style="--len:110" x1="120" y1="30" x2="65" y2="100" stroke="currentColor" stroke-width="1.4"/>' +
+          '<line class="vline" style="--len:110" x1="120" y1="30" x2="175" y2="100" stroke="currentColor" stroke-width="1.4"/>' +
+          '<line class="vline" style="--len:110" x1="120" y1="30" x2="65" y2="180" stroke="currentColor" stroke-width="1.4"/>' +
+          '<line class="vline" style="--len:110" x1="120" y1="30" x2="175" y2="180" stroke="currentColor" stroke-width="1.4"/>' +
+          '<circle cx="65" cy="100" r="11" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>' +
+          '<circle cx="175" cy="100" r="11" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>' +
+          '<circle cx="65" cy="180" r="11" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>' +
+          '<circle cx="175" cy="180" r="11" fill="var(--risk-tint)" stroke="var(--risk)" stroke-width="1.8"/>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.42s">' +
+          '<line class="vline" style="--len:85" x1="175" y1="180" x2="175" y2="100" stroke="var(--risk)" stroke-width="2" marker-end="url(#arrowD3)"/>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.30s">' +
+          '<circle cx="380" cy="30" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>' +
+          '<text x="380" y="16" text-anchor="middle" font-size="10" fill="var(--ink-faint)">Verify</text>' +
+          '<line class="vline" style="--len:110" x1="380" y1="30" x2="325" y2="100" stroke="currentColor" stroke-width="1.4"/>' +
+          '<line class="vline" style="--len:110" x1="380" y1="30" x2="435" y2="100" stroke="currentColor" stroke-width="1.4"/>' +
+          '<line class="vline" style="--len:110" x1="380" y1="30" x2="325" y2="180" stroke="currentColor" stroke-width="1.4"/>' +
+          '<line class="vline" style="--len:110" x1="380" y1="30" x2="435" y2="180" stroke="currentColor" stroke-width="1.4"/>' +
+          '<circle cx="325" cy="100" r="11" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>' +
+          '<circle cx="435" cy="100" r="11" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>' +
+          '<circle cx="325" cy="180" r="11" fill="var(--surface)" stroke="var(--border)" stroke-width="1.4"/>' +
+          '<circle cx="435" cy="180" r="11" fill="var(--risk-tint)" stroke="var(--risk)" stroke-width="1.8"/>' +
+          '<rect x="349" y="61" width="8" height="8" fill="var(--accent)" transform="rotate(45 353 65)"/>' +
+          '<rect x="404" y="61" width="8" height="8" fill="var(--accent)" transform="rotate(45 408 65)"/>' +
+          '<rect x="349" y="101" width="8" height="8" fill="var(--accent)" transform="rotate(45 353 105)"/>' +
+          '<rect x="404" y="101" width="8" height="8" fill="var(--accent)" transform="rotate(45 408 105)"/>' +
+        "</g>" +
+        '<g class="vpart" style="animation-delay:.54s">' +
+          '<line class="vline" style="--len:45" x1="435" y1="180" x2="435" y2="140" stroke="var(--risk)" stroke-width="2" stroke-dasharray="3 3"/>' +
+          '<rect x="430" y="135" width="10" height="10" fill="none" stroke="var(--risk)" stroke-width="1.6" transform="rotate(45 435 140)"/>' +
+        "</g>" +
+        "</svg><figcaption><b>Same breach, different outcome.</b> In a perimeter model, one login trusts everything inside, so a compromised account moves freely. Zero Trust checks identity and context on every request, so that same account is stopped at the next hop (Deloitte, 2026).</figcaption></figure>";
+    },
+    attackChain: function () {
+      var boxes = [
+        [8, "var(--surface)", "var(--border)", "var(--ink)", "Convincing", "message"],
+        [132, "var(--surface)", "var(--border)", "var(--ink)", "Credential", "access"],
+        [256, "var(--surface)", "var(--border)", "var(--ink)", "Data &amp;", "disruption"],
+        [380, "var(--risk-tint)", "var(--risk)", "var(--risk)", "Extortion", "demand"]
+      ];
+      var delays = [.16, .28, .38, .50, .60, .72, .82];
+      var out = "";
+      boxes.forEach(function (b, i) {
+        var x = b[0], cx = x + 48, cy = 76;
+        out += '<g class="vpart" style="animation-delay:' + delays[i * 2] + 's">' +
+          '<rect x="' + x + '" y="40" width="96" height="64" rx="10" fill="' + b[1] + '" stroke="' + b[2] + '" stroke-width="1.5"/>' +
+          '<text x="' + cx + '" y="' + cy + '" text-anchor="middle" font-size="12" font-weight="600" fill="' + b[3] + '">' + b[4] + "</text>" +
+          '<text x="' + cx + '" y="' + (cy + 15) + '" text-anchor="middle" font-size="12" font-weight="600" fill="' + b[3] + '">' + b[5] + "</text>" +
+          "</g>";
+      });
+      var arrows = [
+        [104, 132, "clicked / trusted"],
+        [228, 256, "logs in as employee"],
+        [352, 380, "then"]
+      ];
+      arrows.forEach(function (a, i) {
+        var mid = (a[0] + a[1]) / 2;
+        out += '<g class="vpart" style="animation-delay:' + delays[i * 2 + 1] + 's">' +
+          '<line class="vline" style="--len:35" x1="' + a[0] + '" y1="72" x2="' + a[1] + '" y2="72" stroke="currentColor" stroke-width="1.6" marker-end="url(#arrowD4)"/>' +
+          '<text x="' + mid + '" y="63" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">' + a[2] + "</text>" +
+          "</g>";
+      });
+      return '<figure><svg viewBox="0 0 480 190" role="img" aria-label="Diagram: a convincing message leads to credential access, then data theft or disruption, ending in an extortion demand.">' +
+        '<defs><marker id="arrowD4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>' +
+        out +
+        "</svg><figcaption><b>One message, one outcome.</b> Nigeria is estimated to have lost roughly $3B to cybercrime since 2019 — about $500M a year (TechAfrica News, 2026; Ecofin Agency, 2026, reporting on Deloitte's 2026 outlook).</figcaption></figure>";
+    }
+  };
+
   function buildSlide(s, idx) {
     var el = document.createElement("section");
     el.className = "slide";
@@ -642,8 +848,13 @@
       el.classList.add("center", "titleslide");
       html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><p class="sub">' + s.sub + '</p><div class="byline">' + s.byline + "</div>";
     } else if (s.type === "bullets") {
-      html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><ul class="deck">' +
+      var textHtml = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + '</h2><ul class="deck">' +
         s.items.map(function (i) { return "<li>" + i + "</li>"; }).join("") + "</ul>";
+      if (s.viz && VIZ[s.viz]) {
+        html = '<div class="split"><div class="split-text">' + textHtml + '</div><div class="split-viz">' + VIZ[s.viz]() + "</div></div>";
+      } else {
+        html = textHtml;
+      }
     } else if (s.type === "grid2") {
       html = '<div class="kicker">' + s.kicker + '</div><h2>' + s.title + "</h2>" + cardsHtml(s.cards);
     } else if (s.type === "radar") {
